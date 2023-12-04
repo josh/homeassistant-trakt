@@ -1,0 +1,16 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Trakt"
+      }
+    },
+    "error": {
+      "cannot_connect": "Can't connect",
+      "invalid_auth": "Invalid API Key",
+      "unknown": "Unknown error"
+    }
+  },
+  "entity": {},
+  "services": {}
+}
