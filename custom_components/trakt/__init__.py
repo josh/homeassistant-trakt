@@ -9,7 +9,7 @@ from . import api
 from .const import DOMAIN
 
 PLATFORMS: list[Platform] = [
-    # Platform.SENSOR
+    Platform.MEDIA_PLAYER
 ]
 
 
