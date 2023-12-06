@@ -1,11 +1,10 @@
 """API for Trakt bound to Home Assistant OAuth."""
-from __future__ import annotations
 
 from aiohttp import ClientSession
 from homeassistant.helpers import config_entry_oauth2_flow
 
 
-class AsyncConfigEntryAuth():
+class AsyncConfigEntryAuth:
     """Provide Trakt authentication tied to an OAuth2 based config entry."""
 
     def __init__(
