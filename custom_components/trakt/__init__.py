@@ -8,9 +8,7 @@ from homeassistant.helpers import aiohttp_client, config_entry_oauth2_flow
 from . import api
 from .const import DOMAIN
 
-PLATFORMS: list[Platform] = [
-    Platform.MEDIA_PLAYER
-]
+PLATFORMS: list[Platform] = [Platform.MEDIA_PLAYER]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

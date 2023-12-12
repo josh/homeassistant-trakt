@@ -13,10 +13,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, LOGGER
 
-SUPPORT_TRAKT = (
-    MediaPlayerEntityFeature.TURN_ON
-    | MediaPlayerEntityFeature.TURN_OFF
-)
+SUPPORT_TRAKT = MediaPlayerEntityFeature.TURN_ON | MediaPlayerEntityFeature.TURN_OFF
+
 
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
@@ -26,9 +24,7 @@ async def async_setup_entry(
     LOGGER.warning("async_setup_entry entry.entry_id: %s", entry.entry_id)
     LOGGER.warning("async_setup_entry data: %s", hass.data[DOMAIN][entry.entry_id])
 
-    async_add_entities(
-        [TraktMediaPlayer()]
-    )
+    async_add_entities([TraktMediaPlayer()])
 
 
 class TraktMediaPlayer(MediaPlayerEntity):
