@@ -1,7 +1,9 @@
 """API for Trakt bound to Home Assistant OAuth."""
 
-from aiohttp import ClientSession
+from aiohttp import ClientSession, client
 from homeassistant.helpers import config_entry_oauth2_flow
+
+from .const import TraktUserProfile
 
 
 class AsyncConfigEntryAuth:
@@ -22,3 +24,21 @@ class AsyncConfigEntryAuth:
             await self._oauth_session.async_ensure_token_valid()
 
         return self._oauth_session.token["access_token"]
+
+    async def async_user_profile(self) -> TraktUserProfile:
+        """Return the user profile."""
+        response = await self.async_request(method="GET", path="/users/me")
+        return await response.json()
+
+    async def async_request(self, method: str, path: str) -> client.ClientResponse:
+        client_id = self._oauth_session.implementation.client_id
+        assert len(client_id) == 64, f"Trakt OAuth client_id not found: {client_id}"
+
+        url = f"https://api.trakt.tv{path}"
+        headers = {
+            "Content-Type": "application/json",
+            "trakt-api-key": client_id,
+            "trakt-api-version": "2",
+        }
+
+        return await self._oauth_session.async_request(method, url, headers=headers)
