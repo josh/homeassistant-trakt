@@ -1,8 +1,11 @@
 {
   "config": {
     "step": {
-      "user": {
-        "title": "Trakt"
+      "tmdb": {
+        "title": "TMDB (Optional)",
+        "data": {
+          "tmdb_api_key": "TMDB API Key"
+        }
       }
     },
     "error": {
