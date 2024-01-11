@@ -146,7 +146,7 @@ class TraktMediaPlayer(
     @property
     def name(self):
         """Return the device name."""
-        return f"Trakt ({self.username})"
+        return "Trakt"
 
     @property
     def unique_id(self):
@@ -276,5 +276,5 @@ class TraktMediaPlayer(
             identifiers={(DOMAIN, self.username)},
             manufacturer="Trakt",
             model="Trakt API",
-            name=f"Trakt ({self.username})",
+            name="Trakt",
         )
