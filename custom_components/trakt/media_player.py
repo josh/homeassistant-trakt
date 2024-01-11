@@ -4,6 +4,7 @@ import datetime as dt
 import json
 from typing import Literal
 
+from aiohttp import ClientSession
 from homeassistant.components.media_player import (
     MediaPlayerEntity,
     MediaPlayerEntityFeature,
@@ -12,6 +13,7 @@ from homeassistant.components.media_player import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import (
@@ -46,6 +48,7 @@ async def async_setup_entry(
 
 
 class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
+    session: ClientSession
     entry: ConfigEntry
     entry_auth: AsyncConfigEntryAuth
     _cache: dict[str, dict]
@@ -61,8 +64,10 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
             name=DOMAIN,
             update_interval=dt.timedelta(minutes=5),
         )
+        self.session = async_get_clientsession(self.hass)
         self.entry = entry
         self.entry_auth = hass.data[DOMAIN][entry.entry_id]
+        self.tmdb_api_key = entry.data["tmdb_api_key"]
         self._cache = {}
 
     async def _async_update_data(self) -> TraktWatchingInfo:
@@ -93,12 +98,30 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
                     type="show",
                     id=data["show"]["ids"]["trakt"],
                 )
+                if self.tmdb_api_key and data["show"]["ids"].get("tmdb"):
+                    tmdb_id = data["show"]["ids"]["tmdb"]
+                    season_number = data["episode"]["season"]
+                    episode_number = data["episode"]["number"]
+                    url = f"https://api.themoviedb.org/3/tv/{tmdb_id}/season/{season_number}/episode/{episode_number}/images"
+                    image_url = await self._async_tmdb_image_url(url, type="episode")
+                    data["episode"]["tmdb_image_url"] = image_url
+
+                if self.tmdb_api_key and data["show"]["ids"].get("tmdb"):
+                    tmdb_id = data["show"]["ids"]["tmdb"]
+                    url = f"https://api.themoviedb.org/3/tv/{tmdb_id}/images"
+                    image_url = await self._async_tmdb_image_url(url, type="show")
+                    data["show"]["tmdb_image_url"] = image_url
 
             elif data["type"] == "movie":
                 data["movie"] = await self._async_load_extended_info(
                     type="movie",
                     id=data["movie"]["ids"]["trakt"],
                 )
+                if self.tmdb_api_key and data["movie"]["ids"].get("tmdb"):
+                    tmdb_id = data["movie"]["ids"]["tmdb"]
+                    url = f"https://api.themoviedb.org/3/movie/{tmdb_id}/images"
+                    image_url = await self._async_tmdb_image_url(url, type="movie")
+                    data["movie"]["tmdb_image_url"] = image_url
 
             return data
 
@@ -123,6 +146,32 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
         data = await response.json()
         self._cache[type] = data
         return data
+
+    async def _async_tmdb_image_url(
+        self, url: str, type: Literal["episode", "show", "movie"]
+    ) -> str | None:
+        cache_key = f"{type}_image"
+        if self._cache.get(cache_key, {}).get("api_url") == url:
+            return self._cache[cache_key]["image_url"]
+
+        response = await self.session.get(
+            url,
+            params={"api_key": self.tmdb_api_key},
+            headers={"Accept": "application/json"},
+        )
+        data = await response.json()
+        images = (
+            data.get("backdrops", []) + data.get("posters", []) + data.get("stills", [])
+        )
+        if not images:
+            return None
+
+        image = images[0]
+        file_path = image["file_path"]
+        size = "w500"
+        image_url = f"https://image.tmdb.org/t/p/{size}{file_path}"
+        self._cache[cache_key] = {"api_url": url, "image_url": image_url}
+        return image_url
 
 
 class TraktMediaPlayer(
@@ -254,6 +303,14 @@ class TraktMediaPlayer(
     @property
     def media_image_url(self):
         """Image url of current playing media."""
+        if watching := self.coordinator.data:
+            if watching["type"] == "episode":
+                return (
+                    watching["episode"]["tmdb_image_url"]
+                    or watching["show"]["tmdb_image_url"]
+                )
+            elif watching["type"] == "movie":
+                return watching["movie"]["tmdb_image_url"]
         return None
 
     @property
