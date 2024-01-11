@@ -29,9 +29,9 @@ class OAuth2FlowHandler(
             self.flow_impl.client_id,
             data["token"]["access_token"],
         )
-        username = data["username"] = profile["username"]
+        data["username"] = profile["username"]
 
-        await self.async_set_unique_id(unique_id=f"{DOMAIN}_{username}")
+        await self.async_set_unique_id(unique_id=profile["username"])
 
         return await super().async_oauth_create_entry(data)
 
