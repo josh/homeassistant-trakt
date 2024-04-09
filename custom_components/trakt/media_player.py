@@ -271,7 +271,11 @@ class TraktMediaPlayer(
         """Title of current playing media."""
         if watching := self.coordinator.data:
             if watching["type"] == "episode":
-                return f"{watching['show']['title']} - {watching['episode']['title']}"
+                show_title = watching["show"]["title"]
+                season_number = watching["episode"]["season"]
+                episode_number = watching["episode"]["number"]
+                episode_title = watching["episode"]["title"]
+                return f"{show_title} | S{season_number} E{episode_number} - {episode_title}"
             elif watching["type"] == "movie":
                 return watching["movie"]["title"]
         return None
