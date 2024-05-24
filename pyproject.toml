@@ -1,2 +1,5 @@
+[project]
+name = "homeassistant-trakt"
+
 [tool.ruff.lint]
 extend-select = ["I", "UP"]
