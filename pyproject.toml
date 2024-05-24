@@ -1,5 +1,6 @@
 [project]
 name = "homeassistant-trakt"
+requires-python = ">=3.10.0"
 
 [tool.ruff.lint]
 extend-select = ["I", "UP"]
