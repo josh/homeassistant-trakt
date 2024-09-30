@@ -50,10 +50,11 @@ class OAuth2FlowHandler(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         if user_input is None:
-            return self.async_show_form(
+            result = self.async_show_form(
                 step_id="tmdb",
                 data_schema=STEP_TMDB_DATA_SCHEMA,
             )
+            return cast(ConfigFlowResult, result)
 
         self.data["tmdb_api_key"] = user_input.get("tmdb_api_key", None)
         if not self.data["tmdb_api_key"]:
@@ -64,7 +65,8 @@ class OAuth2FlowHandler(
     async def _create_entry(self) -> ConfigFlowResult:
         await self.async_set_unique_id(unique_id=self.data["username"])
         implementation = cast(LocalOAuth2Implementation, self.flow_impl)
-        return self.async_create_entry(title=implementation.name, data=self.data)
+        result = self.async_create_entry(title=implementation.name, data=self.data)
+        return cast(ConfigFlowResult, result)
 
 
 async def trakt_user_profile(
