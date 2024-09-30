@@ -5,7 +5,7 @@ from typing import Any, cast
 
 import voluptuous as vol
 from aiohttp import ClientSession
-from homeassistant.data_entry_flow import ConfigFlowResult
+from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.helpers import config_entry_oauth2_flow
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.config_entry_oauth2_flow import LocalOAuth2Implementation
