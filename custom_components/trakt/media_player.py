@@ -149,7 +149,9 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
         return data
 
     async def _async_tmdb_image_url(
-        self, url: str, type: Literal["episode", "show", "movie"]
+        self,
+        url: str,
+        type: Literal["episode", "show", "movie"],
     ) -> str | None:
         cache_key = f"{type}_image"
         if self._cache.get(cache_key, {}).get("api_url") == url:
@@ -194,12 +196,12 @@ class TraktMediaPlayer(
         self.username = username
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return the device name."""
         return "Trakt"
 
     @property
-    def unique_id(self):
+    def unique_id(self) -> str:
         """Console device ID."""
         return self.username
 
@@ -227,7 +229,7 @@ class TraktMediaPlayer(
         return None
 
     @property
-    def media_content_type(self):
+    def media_content_type(self) -> str | None:
         """Media content type."""
         if watching := self.coordinator.data:
             if watching["type"] == "episode":
@@ -268,7 +270,7 @@ class TraktMediaPlayer(
         return None
 
     @property
-    def media_title(self):
+    def media_title(self) -> str | None:
         """Title of current playing media."""
         if watching := self.coordinator.data:
             if watching["type"] == "episode":
@@ -306,7 +308,7 @@ class TraktMediaPlayer(
         return None
 
     @property
-    def media_image_url(self):
+    def media_image_url(self) -> str | None:
         """Image url of current playing media."""
         if watching := self.coordinator.data:
             if watching["type"] == "episode":

@@ -1,7 +1,7 @@
 """Config flow for Trakt."""
 
 import logging
-from typing import Any
+from typing import Any, cast
 
 import voluptuous as vol
 from aiohttp import ClientSession
@@ -9,7 +9,7 @@ from homeassistant.data_entry_flow import ConfigFlowResult
 from homeassistant.helpers import config_entry_oauth2_flow
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import DOMAIN
+from .const import DOMAIN, TraktUserProfile
 
 STEP_TMDB_DATA_SCHEMA = vol.Schema(
     {
@@ -68,7 +68,7 @@ async def trakt_user_profile(
     session: ClientSession,
     client_id: str,
     access_token: str,
-) -> dict:
+) -> TraktUserProfile:
     url = "https://api.trakt.tv/users/me"
     headers = {
         "Content-Type": "application/json",
@@ -77,4 +77,4 @@ async def trakt_user_profile(
         "Authorization": f"Bearer {access_token}",
     }
     response = await session.get(url, headers=headers)
-    return await response.json()
+    return cast(TraktUserProfile, await response.json())

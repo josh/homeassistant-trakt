@@ -39,6 +39,7 @@ class TraktEpisode(TypedDict):
     title: str
     ids: TraktEpisodeIDs
     runtime: int
+    tmdb_image_url: str
 
 
 class TraktShowIDs(TypedDict):
@@ -50,6 +51,7 @@ class TraktShow(TypedDict):
     title: str
     year: int
     ids: TraktShowIDs
+    tmdb_image_url: str
 
 
 class TraktMovieIDs(TypedDict):
@@ -62,6 +64,7 @@ class TraktMovie(TypedDict):
     year: int
     ids: TraktMovieIDs
     runtime: int
+    tmdb_image_url: str
 
 
 class TraktWatchingEpisode(TypedDict):
