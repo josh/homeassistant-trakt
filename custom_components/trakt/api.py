@@ -33,7 +33,9 @@ class AsyncConfigEntryAuth:
         return cast(TraktUserProfile, await response.json())
 
     async def async_request(self, method: str, path: str) -> client.ClientResponse:
-        implementation = cast(LocalOAuth2Implementation, self._oauth_session)
+        implementation = cast(
+            LocalOAuth2Implementation, self._oauth_session.implementation
+        )
         client_id = implementation.client_id
         assert len(client_id) == 64, f"Trakt OAuth client_id not found: {client_id}"
 
