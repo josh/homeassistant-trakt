@@ -118,7 +118,7 @@ h11==0.14.0
     # via httpcore
 habluetooth==3.4.1
     # via home-assistant-bluetooth
-hass-nabucasa==0.81.1
+hass-nabucasa==0.82.0
     # via homeassistant
 home-assistant-bluetooth==1.12.2
     # via homeassistant
