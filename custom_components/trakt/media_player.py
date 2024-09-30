@@ -254,7 +254,7 @@ class TraktMediaPlayer(
 
         if watching := self.coordinator.data:
             started_at = dt.datetime.fromisoformat(watching["started_at"])
-            now = dt.datetime.now(dt.timezone.utc)
+            now = dt.datetime.now(dt.UTC)
             return int((now - started_at).total_seconds())
 
         return None
@@ -266,7 +266,7 @@ class TraktMediaPlayer(
         Returns value from homeassistant.util.dt.utcnow().
         """
         if self.coordinator.data:
-            return dt.datetime.now(dt.timezone.utc)
+            return dt.datetime.now(dt.UTC)
         return None
 
     @property
