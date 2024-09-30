@@ -76,11 +76,12 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
             path="/users/me/watching",
         )
 
-        ratelimit: TraktRatelimitInfo = json.loads(response.headers["x-ratelimit"])
-        if ratelimit["remaining"] < 60:
-            LOGGER.warning("Trakt ratelimit remaining: %s", ratelimit["remaining"])
-        elif ratelimit["remaining"] == 0:
-            LOGGER.error("Trakt no requests remaining")
+        if "x-ratelimit" in response.headers:
+            ratelimit: TraktRatelimitInfo = json.loads(response.headers["x-ratelimit"])
+            if ratelimit["remaining"] < 60:
+                LOGGER.warning("Trakt ratelimit remaining: %s", ratelimit["remaining"])
+            elif ratelimit["remaining"] == 0:
+                LOGGER.error("Trakt no requests remaining")
 
         if response.content_type == "application/json":
             if self.update_interval != dt.timedelta(minutes=1):
