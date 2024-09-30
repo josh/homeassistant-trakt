@@ -2,11 +2,11 @@
 
 import datetime as dt
 import json
-from typing import Literal
+from typing import Any, Literal, cast
 
 from aiohttp import ClientSession
-from homeassistant.components.media_player import (
-    MediaPlayerEntity,
+from homeassistant.components.media_player import MediaPlayerEntity
+from homeassistant.components.media_player.const import (
     MediaPlayerEntityFeature,
     MediaPlayerState,
     MediaType,
@@ -51,7 +51,7 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
     session: ClientSession
     entry: ConfigEntry
     entry_auth: AsyncConfigEntryAuth
-    _cache: dict[str, dict]
+    _cache: dict[str, Any]
 
     def __init__(
         self,
@@ -124,7 +124,7 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
                     image_url = await self._async_tmdb_image_url(url, type="movie")
                     data["movie"]["tmdb_image_url"] = image_url
 
-            return data
+            return cast(TraktWatchingInfo, data)
 
         if self.update_interval != dt.timedelta(minutes=5):
             LOGGER.info("Slowing down Trakt polling to 5 minutes")
@@ -136,9 +136,9 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
         self,
         type: Literal["episode", "show", "movie"],
         id: int,
-    ) -> dict:
+    ) -> dict[str, Any]:
         if self._cache.get(type, {}).get("ids", {}).get("trakt") == id:
-            return self._cache[type]
+            return cast(dict[str, Any], self._cache[type])
 
         response = await self.entry_auth.async_request(
             method="GET",
@@ -146,7 +146,7 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
         )
         data = await response.json()
         self._cache[type] = data
-        return data
+        return cast(dict[str, Any], data)
 
     async def _async_tmdb_image_url(
         self,
@@ -155,7 +155,7 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
     ) -> str | None:
         cache_key = f"{type}_image"
         if self._cache.get(cache_key, {}).get("api_url") == url:
-            return self._cache[cache_key]["image_url"]
+            return cast(str, self._cache[cache_key]["image_url"])
 
         response = await self.session.get(
             url,
