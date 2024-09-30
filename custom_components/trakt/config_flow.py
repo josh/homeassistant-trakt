@@ -8,6 +8,7 @@ from aiohttp import ClientSession
 from homeassistant.data_entry_flow import ConfigFlowResult
 from homeassistant.helpers import config_entry_oauth2_flow
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.config_entry_oauth2_flow import LocalOAuth2Implementation
 
 from .const import DOMAIN, TraktUserProfile
 
@@ -34,9 +35,10 @@ class OAuth2FlowHandler(
     async def async_oauth_create_entry(self, data: dict[str, Any]) -> ConfigFlowResult:
         self.data = data
 
+        implementation = cast(LocalOAuth2Implementation, self.flow_impl)
         profile = await trakt_user_profile(
             async_get_clientsession(self.hass),
-            self.flow_impl.client_id,  # type: ignore
+            implementation.client_id,
             data["token"]["access_token"],
         )
         data["username"] = profile["username"]
@@ -61,7 +63,8 @@ class OAuth2FlowHandler(
 
     async def _create_entry(self) -> ConfigFlowResult:
         await self.async_set_unique_id(unique_id=self.data["username"])
-        return self.async_create_entry(title=self.flow_impl.name, data=self.data)
+        implementation = cast(LocalOAuth2Implementation, self.flow_impl)
+        return self.async_create_entry(title=implementation.name, data=self.data)
 
 
 async def trakt_user_profile(

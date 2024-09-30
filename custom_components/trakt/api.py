@@ -4,6 +4,7 @@ from typing import cast
 
 from aiohttp import ClientSession, client
 from homeassistant.helpers import config_entry_oauth2_flow
+from homeassistant.helpers.config_entry_oauth2_flow import LocalOAuth2Implementation
 
 from .const import TraktUserProfile
 
@@ -32,7 +33,8 @@ class AsyncConfigEntryAuth:
         return cast(TraktUserProfile, await response.json())
 
     async def async_request(self, method: str, path: str) -> client.ClientResponse:
-        client_id = self._oauth_session.implementation.client_id  # type: ignore
+        implementation = cast(LocalOAuth2Implementation, self._oauth_session)
+        client_id = implementation.client_id
         assert len(client_id) == 64, f"Trakt OAuth client_id not found: {client_id}"
 
         url = f"https://api.trakt.tv{path}"
