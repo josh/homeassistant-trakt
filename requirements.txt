@@ -233,7 +233,7 @@ uart-devices==0.1.0
     # via bluetooth-adapters
 ulid-transform==1.0.2
     # via homeassistant
-urllib3==1.26.20
+urllib3==2.2.3
     # via
     #   botocore
     #   homeassistant
