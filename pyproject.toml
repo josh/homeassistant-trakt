@@ -9,8 +9,7 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
-    "colorlog>=6.8.1,<7.0",
-    "homeassistant>=2024.1.0",
+    "homeassistant>=2024.4.0",
     "mypy>=1.0.0,<2.0",
     "ruff>=0.3.0",
 ]
