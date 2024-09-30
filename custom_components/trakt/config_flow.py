@@ -5,7 +5,7 @@ from typing import Any
 
 import voluptuous as vol
 from aiohttp import ClientSession
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.data_entry_flow import ConfigFlowResult
 from homeassistant.helpers import config_entry_oauth2_flow
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -31,12 +31,12 @@ class OAuth2FlowHandler(
         """Return logger."""
         return logging.getLogger(__name__)
 
-    async def async_oauth_create_entry(self, data: dict[str, Any]) -> FlowResult:
+    async def async_oauth_create_entry(self, data: dict[str, Any]) -> ConfigFlowResult:
         self.data = data
 
         profile = await trakt_user_profile(
             async_get_clientsession(self.hass),
-            self.flow_impl.client_id,
+            self.flow_impl.client_id,  # type: ignore
             data["token"]["access_token"],
         )
         data["username"] = profile["username"]
@@ -46,7 +46,7 @@ class OAuth2FlowHandler(
 
     async def async_step_tmdb(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         if user_input is None:
             return self.async_show_form(
                 step_id="tmdb",
@@ -59,7 +59,7 @@ class OAuth2FlowHandler(
 
         return await self._create_entry()
 
-    async def _create_entry(self) -> FlowResult:
+    async def _create_entry(self) -> ConfigFlowResult:
         await self.async_set_unique_id(unique_id=self.data["username"])
         return self.async_create_entry(title=self.flow_impl.name, data=self.data)
 

@@ -38,6 +38,7 @@ class TraktEpisode(TypedDict):
     number: int
     title: str
     ids: TraktEpisodeIDs
+    runtime: int
 
 
 class TraktShowIDs(TypedDict):
@@ -60,6 +61,7 @@ class TraktMovie(TypedDict):
     title: str
     year: int
     ids: TraktMovieIDs
+    runtime: int
 
 
 class TraktWatchingEpisode(TypedDict):

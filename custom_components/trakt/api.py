@@ -31,7 +31,7 @@ class AsyncConfigEntryAuth:
         return await response.json()
 
     async def async_request(self, method: str, path: str) -> client.ClientResponse:
-        client_id = self._oauth_session.implementation.client_id
+        client_id = self._oauth_session.implementation.client_id  # type: ignore
         assert len(client_id) == 64, f"Trakt OAuth client_id not found: {client_id}"
 
         url = f"https://api.trakt.tv{path}"
