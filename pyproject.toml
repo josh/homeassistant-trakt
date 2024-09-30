@@ -7,6 +7,14 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "colorlog>=6.8.1,<7.0",
+    "homeassistant>=2024.1.0",
+    "mypy>=1.0.0,<2.0",
+    "ruff>=0.3.0",
+]
+
 [tool.ruff.lint]
 extend-select = ["I", "UP"]
 
