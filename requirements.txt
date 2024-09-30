@@ -45,7 +45,7 @@ attrs==23.2.0
     #   snitun
 awesomeversion==24.6.0
     # via homeassistant
-bcrypt==4.1.3
+bcrypt==4.2.0
     # via homeassistant
 bleak==0.22.2
     # via
