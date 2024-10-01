@@ -87,7 +87,7 @@ ciso8601==2.3.1
     # via
     #   hass-nabucasa
     #   homeassistant
-cryptography==43.0.0
+cryptography==43.0.1
     # via
     #   acme
     #   bluetooth-data-tools
