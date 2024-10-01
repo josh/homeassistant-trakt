@@ -56,6 +56,7 @@ bleak-retry-connector==3.5.0
     # via habluetooth
 bluetooth-adapters==0.19.4
     # via
+    #   bleak-retry-connector
     #   bluetooth-auto-recovery
     #   habluetooth
 bluetooth-auto-recovery==1.4.2
@@ -97,7 +98,10 @@ cryptography==43.0.0
     #   pyopenssl
     #   snitun
 dbus-fast==2.24.2
-    # via bluetooth-adapters
+    # via
+    #   bleak
+    #   bleak-retry-connector
+    #   bluetooth-adapters
 envs==1.4
     # via pycognito
 fnv-hash-fast==1.0.2
@@ -108,6 +112,8 @@ frozenlist==1.4.1
     # via
     #   aiohttp
     #   aiosignal
+greenlet==3.1.1
+    # via sqlalchemy
 h11==0.14.0
     # via httpcore
 habluetooth==3.4.1
@@ -173,20 +179,6 @@ pyjwt==2.9.0
     #   hass-nabucasa
     #   homeassistant
     #   pycognito
-pyobjc-core==10.3.1
-    # via
-    #   bleak
-    #   pyobjc-framework-cocoa
-    #   pyobjc-framework-corebluetooth
-    #   pyobjc-framework-libdispatch
-pyobjc-framework-cocoa==10.3.1
-    # via
-    #   pyobjc-framework-corebluetooth
-    #   pyobjc-framework-libdispatch
-pyobjc-framework-corebluetooth==10.3.1
-    # via bleak
-pyobjc-framework-libdispatch==10.3.1
-    # via bleak
 pyopenssl==24.2.1
     # via
     #   acme
