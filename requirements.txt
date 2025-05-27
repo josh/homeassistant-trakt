@@ -25,7 +25,7 @@ aiozoneinfo==0.2.1
     # via homeassistant
 anyio==4.6.0
     # via httpx
-astral==2.2
+astral==3.2
     # via homeassistant
 async-interrupt==1.2.0
     # via
