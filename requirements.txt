@@ -6,7 +6,7 @@ aiodns==3.2.0
     # via homeassistant
 aiohappyeyeballs==2.4.3
     # via aiohttp
-aiohttp==3.10.5
+aiohttp==3.12.2
     # via
     #   aiohttp-cors
     #   aiohttp-fast-zlib
