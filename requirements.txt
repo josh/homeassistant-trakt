@@ -114,7 +114,7 @@ frozenlist==1.4.1
     #   aiosignal
 greenlet==3.1.1
     # via sqlalchemy
-h11==0.14.0
+h11==0.16.0
     # via httpcore
 habluetooth==3.4.1
     # via home-assistant-bluetooth
