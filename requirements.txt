@@ -251,7 +251,7 @@ voluptuous-openapi==0.0.5
     # via homeassistant
 voluptuous-serialize==2.6.0
     # via homeassistant
-yarl==1.9.7
+yarl==1.20.0
     # via
     #   aiohttp
     #   homeassistant
