@@ -168,7 +168,7 @@ psutil==6.0.0
     # via psutil-home-assistant
 psutil-home-assistant==0.0.1
     # via homeassistant
-pycares==4.4.0
+pycares==4.9.0
     # via aiodns
 pycognito==2024.5.1
     # via hass-nabucasa
