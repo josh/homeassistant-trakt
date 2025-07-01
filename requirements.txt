@@ -204,7 +204,7 @@ requests==2.32.3
     #   acme
     #   homeassistant
     #   pycognito
-ruff==0.6.8
+ruff==0.12.1
     # via homeassistant-trakt (pyproject.toml)
 s3transfer==0.10.2
     # via boto3
