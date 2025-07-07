@@ -54,7 +54,7 @@ class OAuth2FlowHandler(
                 step_id="tmdb",
                 data_schema=STEP_TMDB_DATA_SCHEMA,
             )
-            return cast(ConfigFlowResult, result)
+            return result
 
         self.data["tmdb_api_key"] = user_input.get("tmdb_api_key", None)
         if not self.data["tmdb_api_key"]:
@@ -66,7 +66,7 @@ class OAuth2FlowHandler(
         await self.async_set_unique_id(unique_id=self.data["username"])
         implementation = cast(LocalOAuth2Implementation, self.flow_impl)
         result = self.async_create_entry(title=implementation.name, data=self.data)
-        return cast(ConfigFlowResult, result)
+        return result
 
 
 async def trakt_user_profile(
