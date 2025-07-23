@@ -14,9 +14,9 @@ classifiers = [
 
 [dependency-groups]
 dev = [
-    "homeassistant>=2024.4",
-    "mypy>=1,<2",
-    "ruff>=0.3",
+    "homeassistant>=2024.8",
+    "mypy>=1.12,<2",
+    "ruff>=0.2,<2",
 ]
 
 [tool.ruff]
