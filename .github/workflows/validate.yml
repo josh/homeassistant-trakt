@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - uses: "home-assistant/actions/hassfest@master"
+
+      - uses: home-assistant/actions/hassfest@87c064c607f3c5cc673a24258d0c98d23033bfc3 # master
 
   hacs:
     name: "HACS Validation"
@@ -16,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - uses: "hacs/action@main"
+      - uses: hacs/action@6f81caf1dd4cc0f615444dba4d4a3ceaa22db99c # main
         with:
           category: "integration"
           ignore: "brands"
