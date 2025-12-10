@@ -7,14 +7,14 @@ jobs:
     name: "Hassfest Validation"
     runs-on: ubuntu-24.04
     steps:
-      - uses: "actions/checkout@v6"
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - uses: "home-assistant/actions/hassfest@master"
 
   hacs:
     name: "HACS Validation"
     runs-on: ubuntu-24.04
     steps:
-      - uses: "actions/checkout@v6"
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - uses: "hacs/action@main"
         with:
