@@ -20,6 +20,9 @@ dev = [
     "ruff>=0.2,<2",
 ]
 
+[tool.uv]
+prerelease = "allow"
+
 [tool.ruff]
 lint.extend-select = [ "I", "UP" ]
 
