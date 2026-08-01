@@ -79,10 +79,10 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
 
         if "x-ratelimit" in response.headers:
             ratelimit: TraktRatelimitInfo = json.loads(response.headers["x-ratelimit"])
-            if ratelimit["remaining"] < 60:
-                LOGGER.warning("Trakt ratelimit remaining: %s", ratelimit["remaining"])
-            elif ratelimit["remaining"] == 0:
+            if ratelimit["remaining"] == 0:
                 LOGGER.error("Trakt no requests remaining")
+            elif ratelimit["remaining"] < 60:
+                LOGGER.warning("Trakt ratelimit remaining: %s", ratelimit["remaining"])
 
         if (
             response.status != HTTPStatus.NO_CONTENT
