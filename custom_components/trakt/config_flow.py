@@ -42,7 +42,7 @@ class OAuth2FlowHandler(
             data["token"]["access_token"],
         )
         data["username"] = profile["username"]
-        logging.info("Trakt username: %s", data["username"])
+        self.logger.info("Trakt username: %s", data["username"])
 
         return await self.async_step_tmdb()
 

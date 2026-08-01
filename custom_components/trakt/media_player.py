@@ -286,25 +286,22 @@ class TraktMediaPlayer(
     @property
     def media_series_title(self) -> str | None:
         """Title of series of current playing media, TV show only."""
-        if watching := self.coordinator.data:
-            if watching["type"] == "episode":
-                return watching["show"]["title"]
+        if (watching := self.coordinator.data) and watching["type"] == "episode":
+            return watching["show"]["title"]
         return None
 
     @property
     def media_season(self) -> str | None:
         """Season of current playing media, TV show only."""
-        if watching := self.coordinator.data:
-            if watching["type"] == "episode":
-                return f"Season {watching['episode']['season']}"
+        if (watching := self.coordinator.data) and watching["type"] == "episode":
+            return f"Season {watching['episode']['season']}"
         return None
 
     @property
     def media_episode(self) -> str | None:
         """Episode of current playing media, TV show only."""
-        if watching := self.coordinator.data:
-            if watching["type"] == "episode":
-                return watching["episode"]["title"]
+        if (watching := self.coordinator.data) and watching["type"] == "episode":
+            return watching["episode"]["title"]
         return None
 
     @property
