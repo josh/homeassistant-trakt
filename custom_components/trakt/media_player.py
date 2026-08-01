@@ -40,9 +40,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up Xbox media_player from a config entry."""
 
-    coordinator = TraktWatchingUpdateCoordinator(hass, entry)
-    await coordinator.async_config_entry_first_refresh()
-
+    coordinator = entry.runtime_data
     username = entry.data["username"]
 
     async_add_entities([TraktMediaPlayer(coordinator=coordinator, username=username)])

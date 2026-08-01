@@ -7,6 +7,7 @@ from homeassistant.helpers import aiohttp_client, config_entry_oauth2_flow
 
 from . import api
 from .const import DOMAIN
+from .media_player import TraktWatchingUpdateCoordinator
 
 PLATFORMS: list[Platform] = [Platform.MEDIA_PLAYER]
 
@@ -24,6 +25,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = api.AsyncConfigEntryAuth(
         aiohttp_client.async_get_clientsession(hass), session
     )
+
+    coordinator = TraktWatchingUpdateCoordinator(hass, entry)
+    await coordinator.async_config_entry_first_refresh()
+    entry.runtime_data = coordinator
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
