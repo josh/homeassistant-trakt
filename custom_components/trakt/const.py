@@ -2,7 +2,7 @@
 
 import logging
 from datetime import timedelta
-from typing import Final, Literal, TypedDict
+from typing import Final, Literal, NotRequired, TypedDict
 
 DOMAIN: Final = "trakt"
 
@@ -39,7 +39,7 @@ class TraktEpisode(TypedDict):
     title: str
     ids: TraktEpisodeIDs
     runtime: int
-    tmdb_image_url: str
+    tmdb_image_url: NotRequired[str | None]
 
 
 class TraktShowIDs(TypedDict):
@@ -51,7 +51,7 @@ class TraktShow(TypedDict):
     title: str
     year: int
     ids: TraktShowIDs
-    tmdb_image_url: str
+    tmdb_image_url: NotRequired[str | None]
 
 
 class TraktMovieIDs(TypedDict):
@@ -64,7 +64,7 @@ class TraktMovie(TypedDict):
     year: int
     ids: TraktMovieIDs
     runtime: int
-    tmdb_image_url: str
+    tmdb_image_url: NotRequired[str | None]
 
 
 class TraktWatchingEpisode(TypedDict):
