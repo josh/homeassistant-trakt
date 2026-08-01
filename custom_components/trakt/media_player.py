@@ -309,12 +309,11 @@ class TraktMediaPlayer(
         """Image url of current playing media."""
         if watching := self.coordinator.data:
             if watching["type"] == "episode":
-                return (
-                    watching["episode"]["tmdb_image_url"]
-                    or watching["show"]["tmdb_image_url"]
-                )
+                return watching["episode"].get("tmdb_image_url") or watching[
+                    "show"
+                ].get("tmdb_image_url")
             elif watching["type"] == "movie":
-                return watching["movie"]["tmdb_image_url"]
+                return watching["movie"].get("tmdb_image_url")
         return None
 
     @property
