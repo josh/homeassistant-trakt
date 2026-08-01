@@ -8,7 +8,6 @@ from typing import Any, Literal, cast
 from aiohttp import ClientSession
 from homeassistant.components.media_player import MediaPlayerEntity
 from homeassistant.components.media_player.const import (
-    MediaPlayerEntityFeature,
     MediaPlayerState,
     MediaType,
 )
@@ -29,8 +28,6 @@ from .const import (
     TraktRatelimitInfo,
     TraktWatchingInfo,
 )
-
-SUPPORT_TRAKT = MediaPlayerEntityFeature.TURN_ON | MediaPlayerEntityFeature.TURN_OFF
 
 
 async def async_setup_entry(
@@ -216,11 +213,6 @@ class TraktMediaPlayer(
             return MediaPlayerState.IDLE
 
     @property
-    def supported_features(self) -> MediaPlayerEntityFeature:
-        """Flag media player features that are supported."""
-        return SUPPORT_TRAKT
-
-    @property
     def media_content_id(self) -> str | None:
         """Content ID of current playing media."""
         if watching := self.coordinator.data:
@@ -322,14 +314,6 @@ class TraktMediaPlayer(
     def media_image_remotely_accessible(self) -> bool:
         """If the image url is remotely accessible."""
         return True
-
-    async def async_turn_on(self) -> None:
-        """Turn the media player on."""
-        LOGGER.warning("TODO: async_turn_on")
-
-    async def async_turn_off(self) -> None:
-        """Turn the media player off."""
-        LOGGER.warning("TODO: async_turn_off")
 
     @property
     def device_info(self) -> DeviceInfo:
