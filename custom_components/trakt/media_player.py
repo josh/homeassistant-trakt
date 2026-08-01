@@ -2,6 +2,7 @@
 
 import datetime as dt
 import json
+from http import HTTPStatus
 from typing import Any, Literal, cast
 
 from aiohttp import ClientSession
@@ -83,7 +84,10 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
             elif ratelimit["remaining"] == 0:
                 LOGGER.error("Trakt no requests remaining")
 
-        if response.content_type == "application/json":
+        if (
+            response.status != HTTPStatus.NO_CONTENT
+            and response.content_type == "application/json"
+        ):
             if self.update_interval != dt.timedelta(minutes=1):
                 LOGGER.info("Speeding up Trakt polling to 1 minute")
                 self.update_interval = dt.timedelta(minutes=1)
