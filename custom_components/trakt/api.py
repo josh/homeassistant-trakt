@@ -46,4 +46,6 @@ class AsyncConfigEntryAuth:
             "trakt-api-version": "2",
         }
 
-        return await self._oauth_session.async_request(method, url, headers=headers)
+        response = await self._oauth_session.async_request(method, url, headers=headers)
+        response.raise_for_status()
+        return response
