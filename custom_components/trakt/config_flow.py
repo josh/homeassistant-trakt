@@ -64,6 +64,7 @@ class OAuth2FlowHandler(
 
     async def _create_entry(self) -> ConfigFlowResult:
         await self.async_set_unique_id(unique_id=self.data["username"])
+        self._abort_if_unique_id_configured()
         implementation = cast(LocalOAuth2Implementation, self.flow_impl)
         result = self.async_create_entry(title=implementation.name, data=self.data)
         return result
