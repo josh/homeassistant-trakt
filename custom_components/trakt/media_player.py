@@ -50,6 +50,7 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
     session: ClientSession
     entry: ConfigEntry
     entry_auth: AsyncConfigEntryAuth
+    tmdb_api_key: str | None
     _cache: dict[str, Any]
 
     def __init__(
@@ -66,7 +67,7 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
         self.session = async_get_clientsession(self.hass)
         self.entry = entry
         self.entry_auth = hass.data[DOMAIN][entry.entry_id]
-        self.tmdb_api_key = entry.data["tmdb_api_key"]
+        self.tmdb_api_key = entry.data.get("tmdb_api_key")
         self._cache = {}
 
     async def _async_update_data(self) -> TraktWatchingInfo:
@@ -155,6 +156,9 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
         url: str,
         type: Literal["episode", "show", "movie"],
     ) -> str | None:
+        if not self.tmdb_api_key:
+            return None
+
         cache_key = f"{type}_image"
         if self._cache.get(cache_key, {}).get("api_url") == url:
             return cast(str, self._cache[cache_key]["image_url"])
