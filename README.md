@@ -4,11 +4,4 @@ This custom component for Home Assistant allows you to integrate your [Trakt](ht
 
 ## Installation
 
-Use [HACS](https://hacs.xyz) or manually installed the files into your `config/custom_components/` directory.
-
-```sh
-$ ssh homeassistant
-$ cd /config/custom_components/
-$ curl -L https://github.com/josh/homeassistant-trakt/archive/refs/heads/main.tar.gz |
-    tar -xz --strip-components=2 homeassistant-trakt-main/custom_components/trakt
-```
+Use [HACS](https://hacs.xyz), or download the latest [release](https://github.com/josh/homeassistant-trakt/releases/latest) and copy `custom_components/trakt` into your `config/custom_components/` directory.

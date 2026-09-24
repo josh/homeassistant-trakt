@@ -1,60 +1,23 @@
-# Agents Guide
+# Development
 
-This project uses Python 3.12 and manages dependencies with `uv`.
+Trakt now playing status as a media player entity. Keep documentation minimal and never hard-wrap Markdown.
 
-## Setup
-
-Install Python 3.12 or newer.
-
-Install `uv` with:
+Targets the latest Home Assistant release only. `requires-python` mirrors Home Assistant's own value, so raising one means raising the other.
 
 ```sh
-$ curl -LsSf https://astral.sh/uv/install.sh | sh
-# or
-$ pipx install uv
+uv sync --locked
+uv run ruff format --diff .
+uv run ruff check .
+uv run mypy .
 ```
 
-Then install dependencies with:
+There are no tests. `mypy --strict` against the locked Home Assistant is the gate that catches API drift.
+
+Run these locally before committing; neither is installed by `uv sync` or checked in CI.
 
 ```sh
-$ uv sync
+uvx ssort .
+uvx pyproject-fmt pyproject.toml
 ```
 
-## Testing
-
-Check code style with ruff:
-
-```sh
-$ uv run ruff format --diff .
-$ uv run ruff check .
-```
-
-Check type correctness with mypy:
-
-```sh
-$ uv run mypy .
-```
-
-## Formatting
-
-You can automatically fix most formatting issues with:
-
-```sh
-$ uv tool run ruff format .
-```
-
-Functions should be sorted in dependency order with:
-
-```sh
-$ uv tool run ssort .
-```
-
-After making changes to `pyproject.toml`, ensure its formatted with `pyproject-fmt`.
-
-```sh
-uv tool run pyproject-fmt pyproject.toml
-```
-
-## Comments and Docstrings
-
-Avoid superfluous comments and Python docstrings. Only include them when they add value or clarify complex logic.
+Sort functions in dependency order. Avoid superfluous comments and docstrings; only include them when they clarify complex logic.
