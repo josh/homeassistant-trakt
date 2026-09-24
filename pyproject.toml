@@ -1,6 +1,6 @@
 [project]
 name = "homeassistant-trakt"
-version = "0.1.0"
+version = "2026.9.0"
 readme = "README.md"
 license = "MIT"
 license-files = [ "LICENSE" ]
