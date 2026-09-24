@@ -1,33 +1,28 @@
 [project]
 name = "homeassistant-trakt"
 version = "0.1.0"
-readme = "README.md"
-license = "MIT"
-license-files = [ "LICENSE" ]
-authors = [ { name = "Joshua Peek" } ]
-requires-python = ">=3.12"
+requires-python = ">=3.14.2"
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
 
 [dependency-groups]
 dev = [
-    "homeassistant>=2024.8",
-    "mypy>=1.12,<2",
-    "ruff>=0.2,<2",
+    "homeassistant>=2026.9",
+    "mypy",
+    "ruff",
 ]
 
 [tool.uv]
-prerelease = "allow"
+package = false
 
 [tool.ruff]
 lint.extend-select = [ "I", "UP" ]
 
 [tool.pyproject-fmt]
 indent = 4
+max_supported_python = "3.14"
 
 [tool.mypy]
 strict = true
