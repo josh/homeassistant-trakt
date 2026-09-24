@@ -36,3 +36,11 @@ jobs:
 
       - name: mypy
         run: uv run mypy .
+
+      - name: Assert a single Home Assistant resolution
+        run: |
+          n=$(grep -c '^name = "homeassistant"$' uv.lock)
+          [ "$n" = 1 ] || {
+            echo "::error::uv.lock resolved $n homeassistant versions (expected 1) - requires-python is behind Home Assistant's own requires-python; copy HA's value into pyproject.toml, raise the homeassistant floor and hacs.json to match, then re-lock"
+            exit 1
+          }
