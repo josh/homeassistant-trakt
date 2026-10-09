@@ -13,7 +13,7 @@ classifiers = [
 
 [dependency-groups]
 dev = [
-    "homeassistant>=2026.9",
+    "homeassistant>=2026.10",
     "mypy",
     "ruff",
 ]

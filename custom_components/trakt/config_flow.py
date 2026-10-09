@@ -3,7 +3,7 @@
 import logging
 from typing import Any, cast
 
-import voluptuous as vol
+import probatio as vol
 from aiohttp import ClientSession
 from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.helpers import config_entry_oauth2_flow
