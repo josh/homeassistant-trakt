@@ -19,6 +19,22 @@ STEP_TMDB_DATA_SCHEMA = vol.Schema(
 )
 
 
+async def trakt_user_profile(
+    session: ClientSession,
+    client_id: str,
+    access_token: str,
+) -> TraktUserProfile:
+    url = "https://api.trakt.tv/users/me"
+    headers = {
+        "Content-Type": "application/json",
+        "trakt-api-key": client_id,
+        "trakt-api-version": "2",
+        "Authorization": f"Bearer {access_token}",
+    }
+    response = await session.get(url, headers=headers)
+    return cast(TraktUserProfile, await response.json())
+
+
 class OAuth2FlowHandler(
     config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=DOMAIN
 ):
@@ -46,6 +62,13 @@ class OAuth2FlowHandler(
 
         return await self.async_step_tmdb()
 
+    async def _create_entry(self) -> ConfigFlowResult:
+        await self.async_set_unique_id(unique_id=self.data["username"])
+        self._abort_if_unique_id_configured()
+        implementation = cast(LocalOAuth2Implementation, self.flow_impl)
+        result = self.async_create_entry(title=implementation.name, data=self.data)
+        return result
+
     async def async_step_tmdb(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
@@ -61,26 +84,3 @@ class OAuth2FlowHandler(
             self.logger.warning("No TMDB API key provided")
 
         return await self._create_entry()
-
-    async def _create_entry(self) -> ConfigFlowResult:
-        await self.async_set_unique_id(unique_id=self.data["username"])
-        self._abort_if_unique_id_configured()
-        implementation = cast(LocalOAuth2Implementation, self.flow_impl)
-        result = self.async_create_entry(title=implementation.name, data=self.data)
-        return result
-
-
-async def trakt_user_profile(
-    session: ClientSession,
-    client_id: str,
-    access_token: str,
-) -> TraktUserProfile:
-    url = "https://api.trakt.tv/users/me"
-    headers = {
-        "Content-Type": "application/json",
-        "trakt-api-key": client_id,
-        "trakt-api-version": "2",
-        "Authorization": f"Bearer {access_token}",
-    }
-    response = await session.get(url, headers=headers)
-    return cast(TraktUserProfile, await response.json())

@@ -30,19 +30,6 @@ from .const import (
 )
 
 
-async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
-) -> None:
-    """Set up Xbox media_player from a config entry."""
-
-    coordinator = entry.runtime_data
-    username = entry.data["username"]
-
-    async_add_entities([TraktMediaPlayer(coordinator=coordinator, username=username)])
-
-
 class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
     session: ClientSession
     entry: ConfigEntry
@@ -66,6 +53,53 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
         self.entry_auth = hass.data[DOMAIN][entry.entry_id]
         self.tmdb_api_key = entry.data.get("tmdb_api_key")
         self._cache = {}
+
+    async def _async_load_extended_info(
+        self,
+        type: Literal["episode", "show", "movie"],
+        id: int,
+    ) -> dict[str, Any]:
+        if self._cache.get(type, {}).get("ids", {}).get("trakt") == id:
+            return cast(dict[str, Any], self._cache[type])
+
+        response = await self.entry_auth.async_request(
+            method="GET",
+            path=f"/{type}s/{id}?extended=full",
+        )
+        data = await response.json()
+        self._cache[type] = data
+        return cast(dict[str, Any], data)
+
+    async def _async_tmdb_image_url(
+        self,
+        url: str,
+        type: Literal["episode", "show", "movie"],
+    ) -> str | None:
+        if not self.tmdb_api_key:
+            return None
+
+        cache_key = f"{type}_image"
+        if self._cache.get(cache_key, {}).get("api_url") == url:
+            return cast(str, self._cache[cache_key]["image_url"])
+
+        response = await self.session.get(
+            url,
+            params={"api_key": self.tmdb_api_key},
+            headers={"Accept": "application/json"},
+        )
+        data = await response.json()
+        images = (
+            data.get("backdrops", []) + data.get("posters", []) + data.get("stills", [])
+        )
+        if not images:
+            return None
+
+        image = images[0]
+        file_path = image["file_path"]
+        size = "w500"
+        image_url = f"https://image.tmdb.org/t/p/{size}{file_path}"
+        self._cache[cache_key] = {"api_url": url, "image_url": image_url}
+        return image_url
 
     async def _async_update_data(self) -> TraktWatchingInfo:
         response = await self.entry_auth.async_request(
@@ -131,53 +165,6 @@ class TraktWatchingUpdateCoordinator(DataUpdateCoordinator[TraktWatchingInfo]):
             self.update_interval = dt.timedelta(minutes=5)
 
         return None
-
-    async def _async_load_extended_info(
-        self,
-        type: Literal["episode", "show", "movie"],
-        id: int,
-    ) -> dict[str, Any]:
-        if self._cache.get(type, {}).get("ids", {}).get("trakt") == id:
-            return cast(dict[str, Any], self._cache[type])
-
-        response = await self.entry_auth.async_request(
-            method="GET",
-            path=f"/{type}s/{id}?extended=full",
-        )
-        data = await response.json()
-        self._cache[type] = data
-        return cast(dict[str, Any], data)
-
-    async def _async_tmdb_image_url(
-        self,
-        url: str,
-        type: Literal["episode", "show", "movie"],
-    ) -> str | None:
-        if not self.tmdb_api_key:
-            return None
-
-        cache_key = f"{type}_image"
-        if self._cache.get(cache_key, {}).get("api_url") == url:
-            return cast(str, self._cache[cache_key]["image_url"])
-
-        response = await self.session.get(
-            url,
-            params={"api_key": self.tmdb_api_key},
-            headers={"Accept": "application/json"},
-        )
-        data = await response.json()
-        images = (
-            data.get("backdrops", []) + data.get("posters", []) + data.get("stills", [])
-        )
-        if not images:
-            return None
-
-        image = images[0]
-        file_path = image["file_path"]
-        size = "w500"
-        image_url = f"https://image.tmdb.org/t/p/{size}{file_path}"
-        self._cache[cache_key] = {"api_url": url, "image_url": image_url}
-        return image_url
 
 
 class TraktMediaPlayer(
@@ -328,3 +315,16 @@ class TraktMediaPlayer(
             model="Trakt API",
             name="Trakt",
         )
+
+
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Set up Xbox media_player from a config entry."""
+
+    coordinator = entry.runtime_data
+    username = entry.data["username"]
+
+    async_add_entities([TraktMediaPlayer(coordinator=coordinator, username=username)])
