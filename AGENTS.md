@@ -2,7 +2,7 @@
 
 Trakt now playing status as a media player entity. Keep documentation minimal and never hard-wrap Markdown.
 
-Targets the latest Home Assistant release only. `requires-python` mirrors Home Assistant's own value, so raising one means raising the other.
+Targets the latest Home Assistant release only. `requires-python` and `.python-version` mirror Home Assistant's own, so raising one means raising the other.
 
 ```sh
 uv sync --locked

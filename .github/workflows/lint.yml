@@ -53,3 +53,14 @@ jobs:
             echo "::error::uv.lock resolved $n homeassistant versions (expected 1) - requires-python is behind Home Assistant's own requires-python; copy HA's value into pyproject.toml, raise the homeassistant floor and hacs.json to match, then re-lock"
             exit 1
           }
+
+      - name: Assert .python-version matches Home Assistant
+        run: |
+          v=$(grep -A1 '^name = "homeassistant"$' uv.lock | sed -n 's/^version = "\(.*\)"$/\1/p')
+          url="https://raw.githubusercontent.com/home-assistant/core/$v/.python-version"
+          want=$(curl -fsSL "$url")
+          have=$(cat .python-version)
+          [ "$have" = "$want" ] || {
+            echo "::error file=.python-version::.python-version is $have but Home Assistant $v runs $want - copy it with: curl -fsSL $url > .python-version"
+            exit 1
+          }
