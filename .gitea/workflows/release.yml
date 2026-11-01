@@ -14,12 +14,14 @@ jobs:
     steps:
       - name: Create release
         run: |
-          curl -fsS -X POST "$GITEA_API_URL/repos/$GITEA_REPOSITORY/releases" \
-            -H "Authorization: token $GITEA_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"tag_name\":\"$GITEA_REF_NAME\"}"
+          curl --fail --silent --output /dev/null \
+            --header "Authorization: token $GITEA_TOKEN" \
+            "$RELEASES_URL/tags/$GITEA_REF_NAME" ||
+          curl --fail --silent --show-error --request POST "$RELEASES_URL" \
+            --header "Authorization: token $GITEA_TOKEN" \
+            --header "Content-Type: application/json" \
+            --data "{\"tag_name\":\"$GITEA_REF_NAME\"}"
         env:
-          GITEA_API_URL: ${{ gitea.api_url }}
-          GITEA_REPOSITORY: ${{ gitea.repository }}
+          RELEASES_URL: ${{ gitea.api_url }}/repos/${{ gitea.repository }}/releases
           GITEA_REF_NAME: ${{ gitea.ref_name }}
           GITEA_TOKEN: ${{ gitea.token }}
