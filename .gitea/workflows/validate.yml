@@ -1,26 +1,28 @@
-name: "Validate"
+name: Validate
 
 on:
-  pull_request:
   push:
-    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   hassfest:
-    name: "Hassfest Validation"
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-amd64
+
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: home-assistant/actions/hassfest@06749dd8c0b54f350bc69c8752456cee498808a3 # master
 
   hacs:
-    name: "HACS Validation"
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-amd64
+
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: hacs/action@1ebf01c408f29afcb6406bd431bc98fd8cbb15aa # main
         with:
-          category: "integration"
-          ignore: "brands"
+          category: integration
+          ignore: brands issues

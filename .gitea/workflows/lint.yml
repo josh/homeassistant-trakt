@@ -1,16 +1,15 @@
 name: Lint
 
 on:
-  pull_request:
   push:
-    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   ruff:
-    runs-on: ubuntu-slim
-
-    env:
-      RUFF_OUTPUT_FORMAT: github
+    runs-on: ubuntu-amd64
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -27,7 +26,7 @@ jobs:
         run: uv run ruff check .
 
   mypy:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-amd64
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -41,7 +40,7 @@ jobs:
         run: uv run mypy .
 
   lockfile:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-amd64
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

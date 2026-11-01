@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-amd64
+
+    steps:
+      - name: Create release
+        run: |
+          curl -fsS -X POST "$GITEA_API_URL/repos/$GITEA_REPOSITORY/releases" \
+            -H "Authorization: token $GITEA_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"tag_name\":\"$GITEA_REF_NAME\"}"
+        env:
+          GITEA_API_URL: ${{ gitea.api_url }}
+          GITEA_REPOSITORY: ${{ gitea.repository }}
+          GITEA_REF_NAME: ${{ gitea.ref_name }}
+          GITEA_TOKEN: ${{ gitea.token }}
