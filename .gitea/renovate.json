@@ -1,8 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
-  "rebaseWhen": "behind-base-branch",
-  "minimumReleaseAge": "7 days",
   "rangeStrategy": "update-lockfile",
   "lockFileMaintenance": { "enabled": true },
   "postUpgradeTasks": {
@@ -14,10 +11,6 @@
       "description": ".python-version tracks Home Assistant's pin; the lockfile job enforces it",
       "matchManagers": ["pyenv"],
       "enabled": false
-    },
-    {
-      "matchUpdateTypes": ["patch", "minor", "digest", "pinDigest"],
-      "assignees": ["merge-bot"]
     }
   ]
 }
