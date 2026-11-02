@@ -1,6 +1,6 @@
 # homeassistant-trakt
 
-This custom component for Home Assistant allows you to integrate your [Trakt](https://trakt.tv) now playing status as a sensor.
+This custom component for Home Assistant allows you to integrate your [Trakt](https://trakt.tv) now playing status as a media player entity.
 
 ## Installation
 
