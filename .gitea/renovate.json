@@ -1,5 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "schedule": ["* 0-3 15 * *"],
   "rangeStrategy": "update-lockfile",
   "postUpgradeTasks": {
     "commands": ["sync-ha-python-version"],
@@ -7,9 +8,13 @@
   },
   "packageRules": [
     {
-      "description": ".python-version tracks Home Assistant's pin; the lockfile job enforces it",
       "matchManagers": ["pyenv"],
       "enabled": false
+    },
+    {
+      "matchPackageNames": ["homeassistant"],
+      "separateMajorMinor": false,
+      "assignees": ["merge-bot"]
     }
   ]
 }
