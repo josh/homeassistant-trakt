@@ -20,7 +20,7 @@ jobs:
           curl --fail --silent --show-error --request POST "$RELEASES_URL" \
             --header "Authorization: token $GITEA_TOKEN" \
             --header "Content-Type: application/json" \
-            --data "{\"tag_name\":\"$GITEA_REF_NAME\"}"
+            --data "{\"tag_name\":\"$GITEA_REF_NAME\",\"name\":\"$GITEA_REF_NAME\"}"
         env:
           RELEASES_URL: ${{ gitea.api_url }}/repos/${{ gitea.repository }}/releases
           GITEA_REF_NAME: ${{ gitea.ref_name }}
