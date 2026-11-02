@@ -6,6 +6,11 @@
   "rangeStrategy": "update-lockfile",
   "packageRules": [
     {
+      "description": ".python-version tracks Home Assistant's pin; the lockfile job enforces it",
+      "matchManagers": ["pyenv"],
+      "enabled": false
+    },
+    {
       "matchUpdateTypes": ["patch", "minor", "digest", "pinDigest"],
       "assignees": ["merge-bot"]
     }
