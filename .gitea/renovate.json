@@ -4,6 +4,11 @@
   "rebaseWhen": "behind-base-branch",
   "minimumReleaseAge": "7 days",
   "rangeStrategy": "update-lockfile",
+  "lockFileMaintenance": { "enabled": true },
+  "postUpgradeTasks": {
+    "commands": ["sync-ha-python-version"],
+    "fileFilters": [".python-version"]
+  },
   "packageRules": [
     {
       "description": ".python-version tracks Home Assistant's pin; the lockfile job enforces it",
