@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-amd64
+    runs-on: ubuntu-slim-amd64
 
     steps:
       - name: Create release
