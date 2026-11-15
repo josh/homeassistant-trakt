@@ -1223,6 +1223,9 @@ dev = [
     { name = "mypy" },
     { name = "ruff" },
 ]
+lint = [
+    { name = "ruff" },
+]
 
 [package.metadata]
 
@@ -1232,6 +1235,7 @@ dev = [
     { name = "mypy", specifier = ">=2.4.1" },
     { name = "ruff", specifier = ">=0.17.3" },
 ]
+lint = [{ name = "ruff", specifier = ">=0.17.3" }]
 
 [[package]]
 name = "httpcore2"
