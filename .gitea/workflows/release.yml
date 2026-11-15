@@ -14,14 +14,8 @@ jobs:
     steps:
       - name: Create release
         run: |
-          curl --fail --silent --output /dev/null \
-            --header "Authorization: token $GITEA_TOKEN" \
-            "$RELEASES_URL/tags/$GITEA_REF_NAME" ||
-          curl --fail --silent --show-error --request POST "$RELEASES_URL" \
-            --header "Authorization: token $GITEA_TOKEN" \
-            --header "Content-Type: application/json" \
-            --data "{\"tag_name\":\"$GITEA_REF_NAME\",\"name\":\"$GITEA_REF_NAME\"}"
+          gt release create "$TAG" --verify-tag
         env:
-          RELEASES_URL: ${{ gitea.api_url }}/repos/${{ gitea.repository }}/releases
-          GITEA_REF_NAME: ${{ gitea.ref_name }}
+          GITEA_CLI_REPO: ${{ gitea.repository }}
           GITEA_TOKEN: ${{ gitea.token }}
+          TAG: ${{ gitea.ref_name }}
